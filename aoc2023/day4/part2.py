@@ -16,10 +16,8 @@ class Day4:
 		card_num = card.split(":")[0].strip("Card").strip()
 		card_clean = card.split(":")[-1]
 
-		win = card_clean.split("|")[0].strip().split(" ")
-		win = [num for num in win if num != ""]
-		play = card_clean.split("|")[1].strip().split(" ")
-		play = [num for num in play if num != ""]
+		win = [num for num in card_clean.split("|")[0].strip().split(" ") if num != ""]
+		play = [num for num in card_clean.split("|")[1].strip().split(" ") if num != ""]
 	
 		wins = sum([True for num in play if num in win])
 		cards_won = [int(card_num) + i for i in range(1, wins+1)]
