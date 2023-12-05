@@ -5,6 +5,7 @@ with open("data.txt", "r") as f:
     schema = f.readlines()
 
 numbers = ["1","2","3","4","5","6","7","8","9","0"]
+junk = [".", "\n"]
 
 
 def build_num(i, j):
@@ -16,11 +17,14 @@ def build_num(i, j):
             break
     return number
 
+def is_symbol(i, j):
+    return schema[i][j] not in numbers + junk
+
 def symbol_around_number(i, j, number_len):
     x = -1
     while(x <= number_len):
         for y in [-1, 0, 1]:
-            if i+y < len(schema) and j+x < len(schema[i+y]) and schema[i+y][j+x] not in numbers and schema[i+y][j+x] not in [".", "\n"]:
+            if i+y < len(schema) and j+x < len(schema[i+y]) and is_symbol(i+y, j+x):
                 return True
         x += 1
     return False
