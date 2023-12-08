@@ -35,31 +35,42 @@ def whichIsHigher(newbie, oldie):
     
 
 def rank(hand, handtype):
-    print(handtype)
-    print(ranking_dict[handtype])
-    print(len(ranking_dict[handtype]))
+    #print(handtype)
+    #print(ranking_dict[handtype])
+    #print(len(ranking_dict[handtype]))
     if len(ranking_dict[handtype]) == 0:
         ranking_dict[handtype] = [hand]
-        print(ranking_dict[handtype])
+        #print(ranking_dict[handtype])
         return
-    splitting_index = 0
+    splitting_index = 10000
     for i in range(len(ranking_dict[handtype])):
         ranked_hand = ranking_dict[handtype][i]
         comparison_winner = whichIsHigher(hand, ranked_hand)
         if comparison_winner == hand:
-            print("win")
-            print(comparison_winner)
+            #print("win")
+            #print(comparison_winner)
             
             splitting_index = i
             break
     
+    if splitting_index == 0:
+        
+        ranking_dict[handtype] = [hand] + ranking_dict[handtype]
+    else:
+        ranking_dict[handtype] = ranking_dict[handtype] + [hand]
     
-    ranking_dict[handtype] = ranking_dict[handtype][0:i-1] + [hand] + [ranking_dict[handtype][i]] + ranking_dict[handtype][i:-1]
-    print(ranking_dict[handtype])
+    
+    #print(ranking_dict[handtype])
+    #print(hand)
+    ##print(i)
+    #p#rint(ranking_dict[handtype][0:i])
+    #print(ranking_dict[handtype][i:-1])
+    # ranking_dict[handtype] = ranking_dict[handtype][0:i] + [hand] + [ranking_dict[handtype][i]] + ranking_dict[handtype][i:-1]
+    #print(ranking_dict[handtype])
 
 for entry in data:
     hand = entry.split(" ")[0]
-    print(hand)
+    # print(hand)
     rez = rev(hand)
     mapp = mapadou(hand)
     if rez.get(5):
@@ -84,9 +95,20 @@ for entry in data:
         print("high card")
         rank(hand, "high card")
 
-print(ranking_dict)
+#print(ranking_dict)
 
 ranked_list = list()
 for k,v in ranking_dict.items():
     ranked_list += v
 print(ranked_list)
+
+bids = {line.split(" ")[0]: int(line.split(" ")[1]) for line in data}
+
+# total
+somme = 0
+
+i = len(ranked_list)
+while (i > 0):
+    somme += i * bids[ranked_list[len(ranked_list)-i]]
+    i -= 1
+print(somme)
