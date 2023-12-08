@@ -32,81 +32,45 @@ def whichIsHigher(newbie, oldie):
         else:
             return oldie
 
-    
-
 def rank(hand, handtype):
-    #print(handtype)
-    #print(ranking_dict[handtype])
-    #print(len(ranking_dict[handtype]))
     if len(ranking_dict[handtype]) == 0:
         ranking_dict[handtype] = [hand]
-        #print(ranking_dict[handtype])
         return
-    splitting_index = 10000
     for i in range(len(ranking_dict[handtype])):
         ranked_hand = ranking_dict[handtype][i]
         comparison_winner = whichIsHigher(hand, ranked_hand)
         if comparison_winner == hand:
-            #print("win")
-            #print(comparison_winner)
-            
-            splitting_index = i
-            break
-    
-    if splitting_index == 0:
-        
-        ranking_dict[handtype] = [hand] + ranking_dict[handtype]
-    else:
-        ranking_dict[handtype] = ranking_dict[handtype] + [hand]
-    
-    
-    #print(ranking_dict[handtype])
-    #print(hand)
-    ##print(i)
-    #p#rint(ranking_dict[handtype][0:i])
-    #print(ranking_dict[handtype][i:-1])
-    # ranking_dict[handtype] = ranking_dict[handtype][0:i] + [hand] + [ranking_dict[handtype][i]] + ranking_dict[handtype][i:-1]
-    #print(ranking_dict[handtype])
+            ranking_dict[handtype].insert(i, hand)
+            return
+    ranking_dict[handtype].append(hand)
 
 for entry in data:
     hand = entry.split(" ")[0]
-    # print(hand)
     rez = rev(hand)
     mapp = mapadou(hand)
     if rez.get(5):
-        print("five of a kind")
         rank(hand, "five of a kind")
     elif rez.get(4):
-        print("four of a kind")
         rank(hand, "four of a kind")
     elif len(mapp.values()) == 2:
-        print("full house")
         rank(hand, "full house")
     elif rez.get(3) and len(mapp.values()) == 3:
-        print("three of a kind")
         rank(hand, "three of a kind")
     elif len(mapp.values()) == 3 and rez.get(2) and rez.get(1):
-        print("two pairs")
         rank(hand, "two pairs")
     elif rez.get(2) and rez.get(1) and len(mapp.values()) == 4:
-        print("one pair")
         rank(hand, "one pair")
     elif len(mapp.values()) == 5:
-        print("high card")
         rank(hand, "high card")
-
-#print(ranking_dict)
 
 ranked_list = list()
 for k,v in ranking_dict.items():
     ranked_list += v
-print(ranked_list)
 
 bids = {line.split(" ")[0]: int(line.split(" ")[1]) for line in data}
 
 # total
 somme = 0
-
 i = len(ranked_list)
 while (i > 0):
     somme += i * bids[ranked_list[len(ranked_list)-i]]
