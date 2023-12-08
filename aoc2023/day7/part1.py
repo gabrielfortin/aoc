@@ -15,10 +15,6 @@ def mapadou(hand):
 def rev(hand):
     return {v: k for k, v in mapadou(hand).items()}
 
-print(data)
-print(mapadou("HH2777"))
-print(rev("HH2777"))
-
 ranking_dict = {
     "five of a kind": [],
     "four of a kind": [],
@@ -39,17 +35,27 @@ def whichIsHigher(newbie, oldie):
     
 
 def rank(hand, handtype):
+    print(handtype)
+    print(ranking_dict[handtype])
+    print(len(ranking_dict[handtype]))
     if len(ranking_dict[handtype]) == 0:
-        ranking_dict[handtype].append(hand)
+        ranking_dict[handtype] = [hand]
+        print(ranking_dict[handtype])
         return
     splitting_index = 0
     for i in range(len(ranking_dict[handtype])):
         ranked_hand = ranking_dict[handtype][i]
         comparison_winner = whichIsHigher(hand, ranked_hand)
         if comparison_winner == hand:
+            print("win")
+            print(comparison_winner)
+            
             splitting_index = i
             break
-    ranking_dict[handtype] = ranking_dict[handtype][0:i] + [hand] + ranking_dict[handtype][i:-1]
+    
+    
+    ranking_dict[handtype] = ranking_dict[handtype][0:i-1] + [hand] + [ranking_dict[handtype][i]] + ranking_dict[handtype][i:-1]
+    print(ranking_dict[handtype])
 
 for entry in data:
     hand = entry.split(" ")[0]
@@ -79,3 +85,8 @@ for entry in data:
         rank(hand, "high card")
 
 print(ranking_dict)
+
+ranked_list = list()
+for k,v in ranking_dict.items():
+    ranked_list += v
+print(ranked_list)
