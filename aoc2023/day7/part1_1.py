@@ -1,15 +1,7 @@
-with open("input.txt", "r") as f:
+with open("inputtest.txt", "r") as f:
     data = [i.strip() for i in f.readlines()]
 
 ranking = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
-
-class Hand:
-    def __init__(self, entry):
-        self.hand = entry.split(" ")[0]
-        self.bid = int(entry.split(" ")[1])
-
-    def __repr__(self):
-        return f"hand {self.hand} / bid {self.bid}"
 
 def mapadou(hand):
     rez = dict()
@@ -46,16 +38,16 @@ def rank(hand, handtype):
         return
     for i in range(len(ranking_dict[handtype])):
         ranked_hand = ranking_dict[handtype][i]
-        comparison_winner = whichIsHigher(hand.hand, ranked_hand.hand)
-        if comparison_winner == hand.hand:
+        comparison_winner = whichIsHigher(hand, ranked_hand)
+        if comparison_winner == hand:
             ranking_dict[handtype].insert(i, hand)
             return
     ranking_dict[handtype].append(hand)
 
 for entry in data:
-    hand = Hand(entry)
-    rez = rev(hand.hand)
-    mapp = mapadou(hand.hand)
+    hand = entry.split(" ")[0]
+    rez = rev(hand)
+    mapp = mapadou(hand)
     if rez.get(5):
         rank(hand, "five of a kind")
     elif rez.get(4):
@@ -71,21 +63,16 @@ for entry in data:
     elif len(mapp.values()) == 5:
         rank(hand, "high card")
 
-# Convert dict to list
-ranked_list = ranking_dict["five of a kind"] + ranking_dict["four of a kind"] + ranking_dict["full house"]\
-             + ranking_dict["three of a kind"] + ranking_dict["two pairs"] + ranking_dict["one pair"] + ranking_dict["high card"]  
+ranked_list = list()
+for k,v in ranking_dict.items():
+    ranked_list += v
 
-# Parse bids per hand
 bids = {line.split(" ")[0]: int(line.split(" ")[1]) for line in data}
 
-# Calculate total sum
+# total
 somme = 0
 i = len(ranked_list)
 while (i > 0):
-    somme += i * ranked_list[len(ranked_list)-i].bid
+    somme += i * bids[ranked_list[len(ranked_list)-i]]
     i -= 1
-
-from pprint import pprint
-pprint(ranked_list)
-pprint(ranking_dict)
 print(somme)
