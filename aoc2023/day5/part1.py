@@ -5,7 +5,9 @@ with open("input.txt", "r") as f:
 
 def format_mat(entry_name):
     d = data.split(entry_name)[-1].strip().split("\n\n")[0].split("\n")
-    return {int(i.split(" ")[1]): {"entry": int(i.split(" ")[1]), "dest": int(i.split(" ")[0]), "len": int(i.split(" ")[2])} for i in d}
+    return {int(i.split(" ")[1]): {"entry": int(i.split(" ")[1]), 
+                                   "dest": int(i.split(" ")[0]), 
+                                   "len": int(i.split(" ")[2])} for i in d}
 
 first = format_mat("seed-to-soil map:")
 sec = format_mat("soil-to-fertilizer map:")
